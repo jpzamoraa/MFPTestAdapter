@@ -14,7 +14,7 @@ node {
     }
     stage ('Deploy Adapter') {
         echo 'Deploying on MFP Server ...'
-        executeAdapterDeploy('clean','pom.xml', '-Xmx256m')
+        executeAdapterDeploy('clean','pom.xml','-Xmx256m')
     }
 }
 
@@ -55,6 +55,15 @@ def executeMavenGoal (pMavenToolName, pJdkToolName, pMavenSettingsId, pMavenRepo
     }
 }
 
+
+/* Ejecuta comandos de maven */
+def executeAdapterDeploy(pGoalsAndOptions, pPomFilePath, pMavenOpts){
+    def mavenToolDefault = 'maven3.6.3'
+    def javaToolDefault = 'JDK8'
+    def mavenSettingsDefault = ''
+    def mavenRepositoryDefault = '../../.m2'
+    executeAdapterDeploy (mavenToolDefault, javaToolDefault, mavenSettingsDefault, mavenRepositoryDefault, pGoalsAndOptions, pPomFilePath, pMavenOpts)
+}
 /* Ejecuta comandos de maven */
 def executeAdapterDeploy (pMavenToolName, pJdkToolName, pMavenSettingsId, pMavenRepositoryPath, pGoalsAndOptions, pPomFilePath, pMavenOpts) {
     withMaven(
