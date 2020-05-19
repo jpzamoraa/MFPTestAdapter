@@ -81,7 +81,8 @@ def executeAdapterDeploy (pMavenToolName, pJdkToolName, pMavenSettingsId, pMaven
          }
 
          try {
-            sh  "mfpdev adapter deploy mfpServer" 
+             sh "mfpdev server add mfpServer --url http://10.0.1.31:9080 --login admin --password admin --setdefault"
+             sh  "mfpdev adapter deploy mfpServer" 
 
          } catch (Exception err) {
             echo 'Deploy Adapter failed'
