@@ -14,7 +14,7 @@ node {
     }
     stage ('Deploy Adapter') {
         echo 'Deploying on MFP Server ...'
-        sh "mfpdev adapter deploy mfpServer"
+        executeAdapterDeploy('clean','pom.xml', '-Xmx256m')
     }
 }
 
@@ -48,6 +48,34 @@ def executeMavenGoal (pMavenToolName, pJdkToolName, pMavenSettingsId, pMavenRepo
 
          } catch (Exception err) {
             echo 'Maven clean install failed'
+            currentBuild.result = 'FAILURE'
+            throw err
+         }
+
+    }
+}
+
+/* Ejecuta comandos de maven */
+def executeAdapterDeploy (pMavenToolName, pJdkToolName, pMavenSettingsId, pMavenRepositoryPath, pGoalsAndOptions, pPomFilePath, pMavenOpts) {
+    withMaven(
+         maven: pMavenToolName,
+         //mavenSettingsConfig: pMavenSettingsId,
+         mavenLocalRepo: pMavenRepositoryPath,
+         jdk: pJdkToolName,
+         mavenOpts: pMavenOpts
+         ) {
+
+         def mavenCommand = "mvn "
+
+         if(null != pPomFilePath){
+             mavenCommand = mavenCommand + " -f " + pPomFilePath
+         }
+
+         try {
+            sh  "mfpdev adapter deploy mfpServer" 
+
+         } catch (Exception err) {
+            echo 'Deploy Adapter failed'
             currentBuild.result = 'FAILURE'
             throw err
          }
