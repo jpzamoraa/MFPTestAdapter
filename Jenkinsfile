@@ -80,10 +80,16 @@ def executeAdapterDeploy (pMavenToolName, pJdkToolName, pMavenSettingsId, pMaven
              mavenCommand = mavenCommand + " -f " + pPomFilePath
          }
 
+         //Se agrega la configuración del server
          try {
              sh "mfpdev server add mfpServer --url http://10.0.1.31:9080 --login admin --password admin --setdefault"
-             sh  "mfpdev adapter deploy mfpServer" 
+          
+         } catch (Exception err) {
+            echo 'El server ya se encuentra definido'
+         }
 
+         try {
+             sh "mfpdev adapter deploy mfpServer" 
          } catch (Exception err) {
             echo 'Deploy Adapter failed'
             currentBuild.result = 'FAILURE'
