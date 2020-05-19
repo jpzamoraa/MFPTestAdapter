@@ -82,10 +82,11 @@ def executeAdapterDeploy (pMavenToolName, pJdkToolName, pMavenSettingsId, pMaven
 
          //Se agrega la configuración del server
          try {
-             sh "mfpdev server add mfpServer --url http://10.0.1.31:9080 --login admin --password admin --setdefault"
+             sh "mfpdev server add mfpServer --url " + env.MFPSERVERURL +"--login admin --password admin --setdefault"
           
          } catch (Exception err) {
-            echo 'El server ya se encuentra definido'
+             sh "mfpdev server edit mfpServer --url " + env.MFPSERVERURL +"--login admin --password admin --setdefault"
+             echo 'El server ya se encuentra definido'
          }
 
          try {
