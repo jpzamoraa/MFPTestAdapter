@@ -12,6 +12,10 @@ node {
         echo 'Building ...'
         executeMavenGoal('install -Dmaven.test.skip=true', 'pom.xml', '-Xmx256m')
     }
+    stage ('Deploy Adapter') {
+        echo 'Deploying on MFP Server ...'
+        sh "mfpdev adapter deploy mfpServer"
+    }
 }
 
 /* Ejecuta comandos de maven */
